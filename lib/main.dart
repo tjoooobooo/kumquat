@@ -62,10 +62,11 @@ class _MyHomePageState extends State<MyHomePage> {
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
       _counter++;
-      CollectionReference users = Firestore.instance.collection('users');
-      var document = await Firestore.instance.document('users/r5CpQElIe10cX9EF7IHa');
-      var userDocuments = await users.getDocuments();
-      print("tst");
+
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+      var users = await firestore.collection('users').get();
+      print(users);
     });
   }
 
