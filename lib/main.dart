@@ -11,12 +11,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Datenbank Uploader',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.orange,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Datenbank Uploader'),
     );
   }
 }
@@ -32,11 +32,17 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final _formKey = GlobalKey<FormState>();
   final marktIdController = TextEditingController();
-  final artiktelIdController = TextEditingController();
   final artikelController = TextEditingController();
   final preisController = TextEditingController();
   final preisPfandController = TextEditingController();
   final preisEinheitController = TextEditingController();
+  final mengeEinheitController = TextEditingController();
+
+  List<String> spinnerItemsEinheiten = ['kg', 'g', 'ml', 'l'];
+  String dropdownValueEinheiten = 'kg';
+
+  List<String> spinnerItemsFilialen = ['Memo', 'Alex', 'Thomas'];
+  String dropdownValueFilialen = 'Memo';
 
   void _incrementCounter() {
     if (_formKey.currentState.validate()) {
@@ -71,34 +77,38 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              TextFormField(
-                keyboardType: TextInputType.text,
-                autocorrect: false,
-                controller: marktIdController,
-                decoration: InputDecoration(
-                  labelText: 'Filiale',
-                ),
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Bitte die entsprechende Filiale eintragen';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 20),
-              TextFormField(
-                keyboardType: TextInputType.text,
-                autocorrect: false,
-                controller: artiktelIdController,
-                decoration: InputDecoration(
-                  labelText: 'Artikel-Nr',
-                ),
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Bitte eine ArtikelNr eintragen';
-                  }
-                  return null;
-                },
+              Row(
+                children: <Widget>[
+                  Flexible(
+                    child: Text("Filiale:",
+                        style: TextStyle(
+                            fontStyle: FontStyle.italic, fontSize: 25)),
+                  ),
+                  SizedBox(width: 40),
+                  DropdownButton<String>(
+                    value: dropdownValueFilialen,
+                    icon: Icon(Icons.arrow_drop_down),
+                    iconSize: 24,
+                    elevation: 16,
+                    style: TextStyle(fontSize: 18),
+                    underline: Container(
+                      height: 1,
+                      color: Colors.black,
+                    ),
+                    onChanged: (String data) {
+                      setState(() {
+                        dropdownValueFilialen = data;
+                      });
+                    },
+                    items: spinnerItemsFilialen
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                ],
               ),
               SizedBox(height: 20),
               TextFormField(
@@ -131,19 +141,69 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
               ),
               SizedBox(height: 20),
-              TextFormField(
-                keyboardType: TextInputType.text,
-                autocorrect: false,
-                controller: preisEinheitController,
-                decoration: InputDecoration(
-                  labelText: 'Einheitspreis',
-                ),
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Bitte den Preis pro entprechender Einheit eintragen';
-                  }
-                  return null;
-                },
+              Row(
+                children: <Widget>[
+                  Flexible(
+                    child: TextFormField(
+                        keyboardType: TextInputType.text,
+                        autocorrect: false,
+                        controller: preisEinheitController,
+                        decoration: InputDecoration(
+                          labelText: 'Einheitspreis',
+                        ),
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Bitte den Preis pro entprechender Einheit eintragen';
+                          }
+                          return null;
+                        }),
+                  ),
+                  SizedBox(width: 40),
+                  Flexible(
+                    child: TextFormField(
+                        keyboardType: TextInputType.text,
+                        autocorrect: false,
+                        controller: mengeEinheitController,
+                        decoration: InputDecoration(
+                          labelText: 'Menge',
+                        ),
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Bitte Menge für den entprechenden Einheitspreis eintragen';
+                          }
+                          return null;
+                        }),
+                  ),
+                  SizedBox(width: 40),
+                  Column(
+                    children: [
+                      SizedBox(height: 18),
+                      DropdownButton<String>(
+                        value: dropdownValueEinheiten,
+                        icon: Icon(Icons.arrow_drop_down),
+                        iconSize: 24,
+                        elevation: 16,
+                        style: TextStyle(fontSize: 18),
+                        underline: Container(
+                          height: 1,
+                          color: Colors.black,
+                        ),
+                        onChanged: (String data) {
+                          setState(() {
+                            dropdownValueEinheiten = data;
+                          });
+                        },
+                        items: spinnerItemsEinheiten
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                  ),
+                ],
               ),
               SizedBox(height: 20),
               TextFormField(
@@ -161,7 +221,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
-        tooltip: 'Increment',
+        tooltip: 'Upload',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
