@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -31,7 +33,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final _formKey = GlobalKey<FormState>();
-  final marktIdController = TextEditingController();
   final artikelController = TextEditingController();
   final preisController = TextEditingController();
   final preisPfandController = TextEditingController();
@@ -41,27 +42,41 @@ class _MyHomePageState extends State<MyHomePage> {
   List<String> spinnerItemsEinheiten = ['kg', 'g', 'ml', 'l'];
   String dropdownValueEinheiten = 'kg';
 
-  List<String> spinnerItemsFilialen = ['Memo', 'Alex', 'Thomas'];
+  List<String> spinnerItemsFilialen = ['Memo', 'Thomas', 'Alex'];
   String dropdownValueFilialen = 'Memo';
 
-  void _incrementCounter() {
+  Map storeMap = HashMap<String, String>();
+
+  int artikelId = 0;
+  final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
+
+  Future<void> _uploadData() {
     if (_formKey.currentState.validate()) {
       print("Formular ist gültig und kann verarbeitet werden");
-      // Hier können wir mit den geprüften Daten aus dem Formular etwas machen.
-      print(marktIdController.text);
+      CollectionReference stores = _fireStore
+          .collection('stores')
+          .doc(dropdownValueFilialen)
+          .collection("artikel");
+      // Call the user's CollectionReference to add a new user
+
+      return stores
+          .add({
+            'artikel': artikelController.text,
+            'artikelId': artikelId,
+            'preis': preisController.text,
+            'pfand': preisPfandController.text,
+            'einheit': dropdownValueEinheiten,
+            'einheitPreis': preisEinheitController.text,
+            'einheitMenge': mengeEinheitController.text
+
+          })
+          .then((value) => print("Artikel Hinzugefügt"))
+          .catchError((error) =>
+              print("Artikel konnte nicht hinzugefuegt werden: $error"));
     } else {
       print("Formular ist nicht gültig");
+      return null;
     }
-    setState(() async {
-      FirebaseFirestore.instance
-          .collection('users')
-          .get()
-          .then((QuerySnapshot querySnapshot) {
-        querySnapshot.docs.forEach((doc) {
-          print(doc["name"]);
-        });
-      });
-    });
   }
 
   @override
@@ -209,7 +224,7 @@ class _MyHomePageState extends State<MyHomePage> {
               TextFormField(
                 keyboardType: TextInputType.text,
                 autocorrect: false,
-                controller: preisEinheitController,
+                controller: preisPfandController,
                 decoration: InputDecoration(
                   labelText: 'Pfand (nur falls Vorhanden)',
                 ),
@@ -220,7 +235,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
 
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: _uploadData,
         tooltip: 'Upload',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
