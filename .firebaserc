@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "kumquat-d1cb4"
+    "prod": "kumquat-d1cb4",
+    "dev": "kumquat-d1cb4"
   }
 }
