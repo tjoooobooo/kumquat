@@ -7,6 +7,7 @@ import 'api/firebase_api.dart';
 import 'widget/button_widget.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 void main() async {
   runApp(MyApp());
@@ -145,7 +146,13 @@ class _MyHomePageState extends State<MyHomePage> {
       })
           .then((value) => {
             setState(() {
-              AlertDialog(title: Text('Artikel Hinzugefügt'));
+              Fluttertoast.showToast(
+                msg: 'Artikel Hinzugefügt',
+                toastLength: Toast.LENGTH_SHORT,
+                textColor: Colors.black,
+                fontSize: 16,
+                backgroundColor: Colors.grey[200],
+              );
               artikelController.text = "";
               preisController.text = "";
               preisPfandController.text = "";
@@ -155,8 +162,15 @@ class _MyHomePageState extends State<MyHomePage> {
               fileName = null;
             })
           })
-          .catchError((error) =>
-          print("Artikel konnte nicht hinzugefuegt werden: $error"));
+          .catchError((error) => {
+            Fluttertoast.showToast(
+              msg: "Artikel konnte nicht hinzugefuegt werden: $error",
+              toastLength: Toast.LENGTH_SHORT,
+              textColor: Colors.black,
+              fontSize: 16,
+              backgroundColor: Colors.grey[200],
+            )
+          });
     } else {
       print("Formular ist nicht gültig");
       return null;
