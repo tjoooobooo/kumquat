@@ -112,7 +112,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _uploadData() async {
     if (_formKey.currentState.validate()) {
-      print("Formular ist gültig und kann verarbeitet werden");
+      Fluttertoast.showToast(
+        msg: 'Formular ist gültig und kann verarbeitet werden',
+        toastLength: Toast.LENGTH_SHORT,
+        textColor: Colors.black,
+        fontSize: 16,
+        backgroundColor: Colors.grey[200],
+      );
       CollectionReference stores = _fireStore
           .collection('stores')
           .doc(dropdownValueFilialen)
