@@ -172,7 +172,13 @@ class _MyHomePageState extends State<MyHomePage> {
             )
           });
     } else {
-      print("Formular ist nicht gültig");
+      Fluttertoast.showToast(
+        msg: "Formular ist nicht gültig",
+        toastLength: Toast.LENGTH_SHORT,
+        textColor: Colors.black,
+        fontSize: 16,
+        backgroundColor: Colors.grey[200],
+      );
       return null;
     }
     setState(() async {
