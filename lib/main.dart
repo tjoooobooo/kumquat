@@ -44,6 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final preisPfandController = TextEditingController();
   final preisEinheitController = TextEditingController();
   final mengeEinheitController = TextEditingController();
+  final artikelPositionController = TextEditingController();
 
   List<String> spinnerItemsEinheiten = ['kg', 'g', 'ml', 'l'];
   String dropdownValueEinheiten = 'kg';
@@ -148,6 +149,7 @@ class _MyHomePageState extends State<MyHomePage> {
         'einheit': dropdownValueEinheiten,
         'einheitPreis': preisEinheitController.text,
         'einheitMenge': mengeEinheitController.text,
+        'artikelPosition': artikelPositionController.text,
         'articleImage': imageUrl
       })
           .then((value) => {
@@ -164,6 +166,7 @@ class _MyHomePageState extends State<MyHomePage> {
               preisPfandController.text = "";
               preisEinheitController.text = "";
               mengeEinheitController.text = "";
+              artikelPositionController.text = "";
               imageValue = null;
               fileName = null;
             })
@@ -353,6 +356,16 @@ class _MyHomePageState extends State<MyHomePage> {
                   controller: preisPfandController,
                   decoration: InputDecoration(
                     labelText: 'Pfand (nur falls Vorhanden)',
+                  ),
+                ),
+                SizedBox(height: 20),
+                SizedBox(height: 20),
+                TextFormField(
+                  keyboardType: TextInputType.text,
+                  autocorrect: false,
+                  controller: artikelPositionController,
+                  decoration: InputDecoration(
+                    labelText: 'Artikel Position',
                   ),
                 ),
                 SizedBox(height: 20),
