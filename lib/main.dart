@@ -382,6 +382,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   decoration: InputDecoration(
                     labelText: 'Artikel Position',
                   ),
+                  validator: (value) {
+                    if (value != null && value.isEmpty) {
+                      return 'Bitte eine Position eintragen';
+                    }
+                    return null;
+                  },
                 ),
                 SizedBox(height: 20),
                 Row(
