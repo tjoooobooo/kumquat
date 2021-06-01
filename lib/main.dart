@@ -1,3 +1,4 @@
+import 'dart:html';
 import 'dart:typed_data';
 import 'dart:collection';
 
@@ -45,6 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final preisEinheitController = TextEditingController();
   final mengeEinheitController = TextEditingController();
   final artikelPositionController = TextEditingController();
+  bool istAbholbar = false;
 
   List<String> spinnerItemsEinheiten = ['kg', 'g', 'ml', 'l'];
   String dropdownValueEinheiten = 'kg';
@@ -123,7 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
       CollectionReference stores = _fireStore
           .collection('stores')
           .doc(dropdownValueFilialen)
-          .collection("artikel")
+          .collection("articles")
       ;
 
       // return if no image selected
@@ -142,14 +144,15 @@ class _MyHomePageState extends State<MyHomePage> {
       // Call the user's CollectionReference to add a new user
       return stores
           .add({
-        'artikel': artikelController.text,
-        'artikelId': artikelId,
-        'preis': preisController.text,
-        'pfand': preisPfandController.text,
-        'einheit': dropdownValueEinheiten,
-        'einheitPreis': preisEinheitController.text,
-        'einheitMenge': mengeEinheitController.text,
-        'artikelPosition': artikelPositionController.text,
+        'article': artikelController.text,
+        'articleId': artikelId,
+        'price': preisController.text,
+        'deposit': preisPfandController.text,
+        'unit': dropdownValueEinheiten,
+        'unitPrice': preisEinheitController.text,
+        'unitQuantity': mengeEinheitController.text,
+        'articlePosition': artikelPositionController.text,
+        'isCollectible': istAbholbar,
         'articleImage': imageUrl
       })
           .then((value) => {
@@ -167,6 +170,7 @@ class _MyHomePageState extends State<MyHomePage> {
               preisEinheitController.text = "";
               mengeEinheitController.text = "";
               artikelPositionController.text = "";
+              istAbholbar = false;
               imageValue = null;
               fileName = null;
             })
@@ -207,6 +211,18 @@ class _MyHomePageState extends State<MyHomePage> {
 
     if (fileName == null) {
       fileName = 'No Image Selected';
+    }
+
+    Color getColor(Set<MaterialState> states) {
+      const Set<MaterialState> interactiveStates = <MaterialState>{
+        MaterialState.pressed,
+        MaterialState.hovered,
+        MaterialState.focused,
+      };
+      if (states.any(interactiveStates.contains)) {
+        return Colors.black;
+      }
+      return Colors.orange;
     }
 
     return Scaffold(
@@ -359,7 +375,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
                 SizedBox(height: 20),
-                SizedBox(height: 20),
                 TextFormField(
                   keyboardType: TextInputType.text,
                   autocorrect: false,
@@ -367,6 +382,30 @@ class _MyHomePageState extends State<MyHomePage> {
                   decoration: InputDecoration(
                     labelText: 'Artikel Position',
                   ),
+                ),
+                SizedBox(height: 20),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                        "Ist abholbar",
+                      style: TextStyle(
+                        fontSize: 20
+                      ),
+                    ),
+                    SizedBox(width: 30),
+                    Checkbox(
+                      checkColor: Colors.white,
+                      fillColor: MaterialStateProperty.resolveWith(getColor),
+                      value: istAbholbar,
+                      onChanged: (bool value) {
+                        setState(() {
+                          istAbholbar = value;
+                        });
+                      },
+                    ),
+                  ],
                 ),
                 SizedBox(height: 20),
                 ButtonWidget(
