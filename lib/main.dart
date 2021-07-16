@@ -146,11 +146,11 @@ class _MyHomePageState extends State<MyHomePage> {
           .add({
         'name': artikelController.text,
         'articleId': artikelId,
-        'price': preisController.text,
-        'deposit': preisPfandController.text,
+        'price': double.parse(preisController.text),
+        'deposit': double.parse(preisPfandController.text),
         'unit': dropdownValueEinheiten,
-        'unitPrice': preisEinheitController.text,
-        'unitQuantity': mengeEinheitController.text,
+        'unitPrice': double.parse(preisEinheitController.text),
+        'unitQuantity': int.parse(mengeEinheitController.text),
         'articlePosition': artikelPositionController.text,
         'isCollectible': istAbholbar,
         'articleImage': imageUrl
