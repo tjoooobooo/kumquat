@@ -144,7 +144,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // Call the user's CollectionReference to add a new user
       return stores
           .add({
-        'article': artikelController.text,
+        'name': artikelController.text,
         'articleId': artikelId,
         'price': preisController.text,
         'deposit': preisPfandController.text,
