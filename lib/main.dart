@@ -113,23 +113,6 @@ class _MyHomePageState extends State<MyHomePage> {
 //          }
 //      );
 
-  double parseStringToDouble(String number) {
-    if (number == "") {
-      return 0.0;
-    } else {
-      return double.parse(number);
-    }
-  }
-
-  int parseStringToInt(String number) {
-    if (number == "") {
-      return 0;
-    } else {
-      return int.parse(number);
-    }
-  }
-
-
   Future<void> _uploadData() async {
     if (_formKey.currentState.validate()) {
       Fluttertoast.showToast(
@@ -163,11 +146,11 @@ class _MyHomePageState extends State<MyHomePage> {
           .add({
         'name': artikelController.text,
         'articleId': artikelId,
-        'price': parseStringToDouble(preisController.text),
-        'deposit': parseStringToDouble(preisPfandController.text),
+        'price': preisController.text,
+        'deposit': preisPfandController.text,
         'unit': dropdownValueEinheiten,
-        'unitPrice': parseStringToDouble(preisEinheitController.text),
-        'unitQuantity': parseStringToInt(mengeEinheitController.text),
+        'unitPrice': preisEinheitController.text,
+        'unitQuantity': mengeEinheitController.text,
         'articlePosition': artikelPositionController.text,
         'isCollectible': istAbholbar,
         'articleImage': imageUrl
