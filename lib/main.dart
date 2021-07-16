@@ -117,7 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (number == "") {
       return 0.0;
     } else {
-      return double.parse(number);
+      return double.parse(number.replaceAll(",", "."));
     }
   }
 
